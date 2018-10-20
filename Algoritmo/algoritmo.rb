@@ -1,4 +1,10 @@
 
+# Para recibir argumentos desde el terminal 
+# balancedStrings = []
+# ARGV.each do| bString |
+#     balancedString << bString
+# end
+
 # Array of balanced strings, can be 0 to n
 balancedStrings = ['(()[]())']
 
