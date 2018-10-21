@@ -64,7 +64,7 @@ def balancedString(input)
         bStringChar = input.split('')
         
         # Default value
-        iSCorrect = true
+        isCorrect = true
         
         # Iterate over the half of the array length
         (bStringChar.length/2).times do | number |
@@ -76,7 +76,7 @@ def balancedString(input)
             end
         end
 
-        if(iSCorrect)
+        if(isCorrect)
             puts "Correcto"
         else
             puts "Incorrecto"
