@@ -1,10 +1,12 @@
 # Papinotas #
 
-Algorithm
+Algorithm for Balanced String
 
-Problem for Balanced String:
+Test values:
 
-For each ( there must be a )
+Input: `(()[]())`, output: "Correcto"
+Input: `((([])))`, output: "Correcto"
+Input: `((((((())]`, output: "Incorrecto"
 
 ## Ruby Script ## 
 
@@ -26,4 +28,8 @@ After instalation is completed:
 
 - Move to Algoritmo/ directory
 - Run in console `ruby algoritmo.rb`
-- After message prompts `--> ` write the input e.g. ((){[]}()) without quotes (' or ").
+- After message shows in console `--> ` write the input e.g. ((){[]}()) without quotes (' or ").
+
+Note:
+
+Any other character as number, symbols, quotes, letters will make an output as "Incorrecto" 
