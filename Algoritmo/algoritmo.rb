@@ -55,7 +55,7 @@ def balancedString(input)
 
     # If input is not even, means the string is not balanced
     if(input.length % 2 != 0)
-        puts "No cumple #{input.length}"
+        puts "Incorrecto"
 
     # If input is even
     else
@@ -77,14 +77,15 @@ def balancedString(input)
         end
 
         if(iSCorrect)
-            puts "es Correcto"
+            puts "Correcto"
         else
-            puts "es Incorrecto"
+            puts "Incorrecto"
         end
     end
 end
 
 # Call value from console input
+print "--> "
 balancedString = $stdin.readline.strip.to_s
 
 # Function to return noting but a message 
