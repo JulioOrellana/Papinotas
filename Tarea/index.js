@@ -1,4 +1,13 @@
 import { AppRegistry } from 'react-native';
-import App from './App';
+import { Provider as PaperProvider } from 'react-native-paper';
+import App from './src/App';
+
+export default function Main() {
+    return (
+      <PaperProvider>
+        <App />
+      </PaperProvider>
+    );
+  }
 
 AppRegistry.registerComponent('Tarea', () => App);
