@@ -4,7 +4,18 @@ import { Title } from 'react-native-paper'
 import Header from '../components/header'
 import CardItem from '../components/cardItem'
 
+import * as Api from '../lib/Api'
 class Main extends Component{
+
+    constructor(props){
+        super(props)
+    }
+
+    componentDidMount(){
+
+        const a  = Api.getPeople();
+    }
+
     render(){
         return(
             <View>
