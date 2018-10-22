@@ -3,8 +3,9 @@ import { View, Text } from 'react-native'
 import { Title } from 'react-native-paper' 
 import Header from '../components/header'
 import CardItem from '../components/cardItem'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
-import * as Api from '../lib/Api'
 class Main extends Component{
 
     constructor(props){
@@ -13,10 +14,13 @@ class Main extends Component{
 
     componentDidMount(){
 
-        const a  = Api.getPeople();
+        
     }
 
     render(){
+
+        console.log(this.props.data)
+
         return(
             <View>
                 <Title style={{ marginVertical: 30, textAlign: 'center' }}>Lista de Personajes de Star Wars</Title>
@@ -27,4 +31,11 @@ class Main extends Component{
     
 }
 
-export default Main
+export default graphql(
+    gql`
+       {    allPersons{
+                name
+            }
+        }
+    `
+)(Main)
