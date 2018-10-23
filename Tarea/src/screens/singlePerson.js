@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, ScrollView } from 'react-native'
+import { View, StyleSheet, ScrollView, Platform } from 'react-native'
 import { Card, Title, Paragraph, Headline, Subheading, Divider, Text, List, Appbar } from 'react-native-paper'
 import _ from 'lodash'
 import { connect } from 'react-redux'
@@ -33,7 +33,7 @@ class SinglePerson extends Component{
 
         return(
             <View style={{ flex: 1}}>
-                <Appbar style={{ backgroundColor: "#2980b9", justifyContent:'space-between'}}>
+                <Appbar style={[{ backgroundColor: "#2980b9", justifyContent:'space-between', height: 80 }, Platform.OS === "ios" ? { paddingTop: 15} : null ]}>
                     <Appbar.BackAction onPress={() => Actions.pop() } />
                     <Headline style={{ color: "#fff" }}>Tarjeta de Personaje</Headline>
                     <Appbar.Action onPress={() => this.setAsFav(this.props.data.Person.id)} color={ this.props.favChars.includes(this.props.id) ? "#f1c40f" : "#95a5a6"} icon="star"/>
