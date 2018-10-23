@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import * as Movies from './moviesReducer'
+import * as User from './userReducer'
 
-export default combineReducers(Object.assign(
-    Movies,
-))
+export default Object.assign(
+    User,
+)

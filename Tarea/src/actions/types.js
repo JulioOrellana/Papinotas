@@ -1,1 +1,1 @@
-export const MOVIE_LIST = 'MOVIE_LIST'
+export const FAVORITE_CHAR = 'FAVORITE_CHAR'

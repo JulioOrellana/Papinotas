@@ -9,6 +9,11 @@ import Router from './navigation/Navigation'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-client-preset'
 import gql from "graphql-tag";
+import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as StoreProvider } from 'react-redux';
+import createAppStore from './lib/store'
+
+const { persistor, store } = createAppStore()
 
 
 const client = new ApolloClient({
@@ -23,9 +28,14 @@ export default class App extends Component {
 
   render() {
     return (
-      <ApolloProvider client={client}>
-        <Router/>
-      </ApolloProvider>
+      <StoreProvider store={store}>
+        <ApolloProvider client={client}>
+          <PaperProvider>
+            <Router/>
+          </PaperProvider>
+        </ApolloProvider>
+      </StoreProvider>
+      
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, StyleSheet } from 'react-native'
 import { Title } from 'react-native-paper' 
 import Header from '../components/header'
 import CardItem from '../components/cardItem'
@@ -19,7 +19,7 @@ class Main extends Component{
     _keyExtractor = (item,index) => item.id
 
     _renderItem = ({item}) => (
-        <CardItem title={item.name} id={item.id} mode="contained"/>
+        <CardItem title={item.name} id={item.id}/>
       );
 
     shouldComponentUpdate(){
@@ -32,7 +32,7 @@ class Main extends Component{
     render(){
         return(
             <View style={{flex:1}}>
-                <Title style={{ marginVertical: 30, textAlign: 'center' }}>Lista de Personajes de Star Wars</Title>
+                <Title style={ styles.title }>Lista de Personajes de Star Wars</Title>
                 {
                     this.props.data.loading
                     ? <View style={{ marginHorizontal: 20 }}><Text>Cargando...</Text></View>
@@ -59,3 +59,11 @@ export default graphql(
         }
     `
 )(Main)
+
+const styles = StyleSheet.create({
+    title:{
+        color: "#2980b9", 
+        marginVertical: 30, 
+        textAlign: 'center'
+    }
+})

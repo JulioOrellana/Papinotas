@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { View, StyleSheet, ScrollView } from 'react-native'
 import { Card, Title, Paragraph, Headline, Subheading, Divider, Text, List, Appbar } from 'react-native-paper'
 import _ from 'lodash'
+import { connect } from 'react-redux'
+import { bindActionCreators, compose } from 'redux'
+import { ActionCreators } from '../actions'
 import { Actions } from 'react-native-router-flux'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -24,39 +27,37 @@ class SinglePerson extends Component{
 
     render(){
 
-        console.log(this.props)
-
         return(
             <View style={{ flex: 1}}>
-                <Appbar>
+                <Appbar style={{ backgroundColor: "#2980b9", justifyContent:'space-between'}}>
                     <Appbar.BackAction onPress={() => Actions.pop() } />
+                    <Headline style={{ color: "#fff" }}>Tarjeta de Personaje</Headline>
+                    <Appbar.Action icon="star"/>
                 </Appbar>
                 <ScrollView>
                     {
                         this.props.data.loading
-                        ?   <Text style={ styles.firstItem }>Cargando...</Text>
+                        ?   <Text style={ [styles.firstItem, styles.title] }>Cargando...</Text>
                         :   <View style={ styles.firstItem }>
-                                <Headline style={{ textAlign:'center', paddingBottom: 10 }}>Tarjeta de Personaje</Headline>
-                                <Divider/>
                                 <View style={ styles.box }>
-                                    <Title>Bio</Title>
+                                    <Title style={styles.title}>Bio</Title>
                                     <List.Item title={this.props.data.Person.name} description={this.props.data.Person.species.map( s => s.name).join(", ")}/>
                                 </View>
                                 <Divider/>
                                 <View style={ styles.box }>
-                                    <Title>Planeta de origen</Title>
+                                    <Title style={styles.title}>Planeta de origen</Title>
                                     <List.Item title={this.props.data.Person.homeworld.name} description={`${this.props.data.Person.homeworld.population} habitantes `}/>
                                 </View>
                                 
                                 <Divider/>
                                 <View style={ styles.box }>
-                                    <Title>Naves</Title>
-                                    { this.props.data.Person.starships.map( (s,i) => <List.Item key={s.name+ "-" + i} title={s.name} description={`$${s.costInCredits}`}/>) }
+                                    <Title style={styles.title}>Naves</Title>
+                                    { this.props.data.Person.starships.map( (s,i) => <List.Item key={s.name+ "-" + i} title={s.name} description={`${!_.isNull(s.costInCredits)? `$${s.costInCredits}` : "" } `}/>) }
                                 </View>
                                 
                                 <Divider/>
                                 <View style={ styles.box }>
-                                    <Title>Peliculas</Title>
+                                    <Title style={styles.title}>Peliculas</Title>
                                     { this.props.data.Person.films.map( (f,i) => <List.Item key={f.title + "-" + f.id + i} title={f.title} description={`Episode ${this.getRomanNumber(f.episodeId)}`}/>) }
                                 </View>
                             </View>
@@ -67,32 +68,42 @@ class SinglePerson extends Component{
     }
 }
 
-export default graphql(
-    gql`
-        query Person($id: ID!){
-           Person(id: $id){
-                name
-                species {
-                    name
-                }
-                starships {
-                    name
-                    costInCredits
-                }
-                films{
-                    title
-                    episodeId
-                }
-                homeworld {
-                    name
-                    population
-                }
-            }
-        }
-    `,
-    {
-        options: (props) => ({ variables: { id: props.id } })
-    })(SinglePerson)
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+const gqlWrapper = graphql(
+                            gql`
+                                query Person($id: ID!){
+                                Person(id: $id){
+                                        name
+                                        species {
+                                            name
+                                        }
+                                        starships {
+                                            name
+                                            costInCredits
+                                        }
+                                        films{
+                                            title
+                                            episodeId
+                                        }
+                                        homeworld {
+                                            name
+                                            population
+                                        }
+                                    }
+                                }
+                            `,
+                            {
+                                options: (props) => ({ variables: { id: props.id } })
+                            })
+
+export default 
+    compose(
+        gqlWrapper,
+        connect( null, mapDispatchToProps)
+    )(SinglePerson)
 
 const styles = StyleSheet.create({
     subheading: {
@@ -104,5 +115,9 @@ const styles = StyleSheet.create({
     },
     box:{
         marginVertical: 10
+    },
+    title:{
+        color: "#2980b9"
     }
+    
 })
