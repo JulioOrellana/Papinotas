@@ -11,6 +11,10 @@ import gql from 'graphql-tag'
 
 class SinglePerson extends Component{
 
+    setAsFav(id){
+        this.props.setFavoriteCharacters(id)
+    }
+
     getRomanNumber(episode){
         switch(episode){
             case 1: return "I"
@@ -32,7 +36,7 @@ class SinglePerson extends Component{
                 <Appbar style={{ backgroundColor: "#2980b9", justifyContent:'space-between'}}>
                     <Appbar.BackAction onPress={() => Actions.pop() } />
                     <Headline style={{ color: "#fff" }}>Tarjeta de Personaje</Headline>
-                    <Appbar.Action icon="star"/>
+                    <Appbar.Action onPress={() => this.setAsFav(this.props.data.Person.id)} color={ this.props.favChars.includes(this.props.id) ? "#f1c40f" : "#95a5a6"} icon="star"/>
                 </Appbar>
                 <ScrollView>
                     {
@@ -72,10 +76,17 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(ActionCreators, dispatch)
 }
 
+const mapStateToProps = (state) => {
+    return{
+        favChars: state.favoriteCharacters,
+    }
+}
+
 const gqlWrapper = graphql(
                             gql`
                                 query Person($id: ID!){
                                 Person(id: $id){
+                                        id
                                         name
                                         species {
                                             name
@@ -102,7 +113,7 @@ const gqlWrapper = graphql(
 export default 
     compose(
         gqlWrapper,
-        connect( null, mapDispatchToProps)
+        connect( mapStateToProps, mapDispatchToProps)
     )(SinglePerson)
 
 const styles = StyleSheet.create({

@@ -1,7 +1,8 @@
 import * as types from './types'
 
-export function getFavoriteCharacters() {
+export function setFavoriteCharacters(characterId) {
     return {
-        type: types.FAVORITE_CHAR
+        type: types.FAVORITE_CHAR,
+        characterId
     }
 }

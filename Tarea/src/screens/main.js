@@ -35,7 +35,7 @@ class Main extends Component{
                 <Title style={ styles.title }>Lista de Personajes de Star Wars</Title>
                 {
                     this.props.data.loading
-                    ? <View style={{ marginHorizontal: 20 }}><Text>Cargando...</Text></View>
+                    ? <View style={{ marginHorizontal: 20 }}><Text style={{color: "#2980b9"}}>Cargando...</Text></View>
                     : <FlatList
                             data={this.props.data.allPersons}
                             keyExtractor={this._keyExtractor}
