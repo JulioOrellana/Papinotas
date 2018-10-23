@@ -1,35 +1,67 @@
 import React, { Component } from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Card, Title, Paragraph, Headline, Subheading, Divider, Text } from 'react-native-paper'
+import { View, StyleSheet, ScrollView } from 'react-native'
+import { Card, Title, Paragraph, Headline, Subheading, Divider, Text, List, Appbar } from 'react-native-paper'
 import _ from 'lodash'
+import { Actions } from 'react-native-router-flux'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 class SinglePerson extends Component{
+
+    getRomanNumber(episode){
+        switch(episode){
+            case 1: return "I"
+            case 2: return "II"
+            case 3: return "III"
+            case 4: return "IV"
+            case 5: return "V"
+            case 6: return "VI"
+            case 7: return "VII"
+            case 8: return "VIII"
+            default: return episode
+        }
+    }
 
     render(){
 
         console.log(this.props)
 
         return(
-            <View style={{ flex: 1, alignItems: 'center'}}>
-                {
-                    this.props.data.loading
-                    ?   <Text style={{ marginHorizontal: 20 }}>Cargando...</Text>
-                    :   <Card styles={{ flex:1, margin: 20}}>
-                            <Card.Content>
-                                <Headline>Tarjeta de Personaje</Headline>
+            <View style={{ flex: 1}}>
+                <Appbar>
+                    <Appbar.BackAction onPress={() => Actions.pop() } />
+                </Appbar>
+                <ScrollView>
+                    {
+                        this.props.data.loading
+                        ?   <Text style={ styles.firstItem }>Cargando...</Text>
+                        :   <View style={ styles.firstItem }>
+                                <Headline style={{ textAlign:'center', paddingBottom: 10 }}>Tarjeta de Personaje</Headline>
                                 <Divider/>
-                                <Subheading style={styles.subheading}>{ this.props.data.Person.name }</Subheading>
-                                <Subheading style={styles.subheading}>Especie: { this.props.data.Person.species.map( s => s.name).join(", ") }</Subheading>
-                                <Subheading style={styles.subheading}>Casa: { this.props.data.Person.homeworld.name }</Subheading>
+                                <View style={ styles.box }>
+                                    <Title>Bio</Title>
+                                    <List.Item title={this.props.data.Person.name} description={this.props.data.Person.species.map( s => s.name).join(", ")}/>
+                                </View>
                                 <Divider/>
-                                <Subheading style={styles.subheading}>Naves: { this.props.data.Person.starships.map( s => s.name).join(", ") }</Subheading>
+                                <View style={ styles.box }>
+                                    <Title>Planeta de origen</Title>
+                                    <List.Item title={this.props.data.Person.homeworld.name} description={`${this.props.data.Person.homeworld.population} habitantes `}/>
+                                </View>
+                                
                                 <Divider/>
-                                <Subheading style={styles.subheading}>Peliculas: { this.props.data.Person.films.map( f => f.title).join(", ") }</Subheading>
-                            </Card.Content>
-                        </Card>
-                }
+                                <View style={ styles.box }>
+                                    <Title>Naves</Title>
+                                    { this.props.data.Person.starships.map( (s,i) => <List.Item key={s.name+ "-" + i} title={s.name} description={`$${s.costInCredits}`}/>) }
+                                </View>
+                                
+                                <Divider/>
+                                <View style={ styles.box }>
+                                    <Title>Peliculas</Title>
+                                    { this.props.data.Person.films.map( (f,i) => <List.Item key={f.title + "-" + f.id + i} title={f.title} description={`Episode ${this.getRomanNumber(f.episodeId)}`}/>) }
+                                </View>
+                            </View>
+                    }
+                </ScrollView>
             </View>
         )
     }
@@ -45,12 +77,15 @@ export default graphql(
                 }
                 starships {
                     name
+                    costInCredits
                 }
                 films{
                     title
+                    episodeId
                 }
                 homeworld {
                     name
+                    population
                 }
             }
         }
@@ -62,5 +97,12 @@ export default graphql(
 const styles = StyleSheet.create({
     subheading: {
         marginTop: 10
+    },
+    firstItem:{
+        marginHorizontal: 20, 
+        marginTop: 10
+    },
+    box:{
+        marginVertical: 10
     }
 })
