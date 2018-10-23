@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, FlatList } from 'react-native'
 import { Title } from 'react-native-paper' 
 import Header from '../components/header'
 import CardItem from '../components/cardItem'
@@ -12,19 +12,27 @@ class Main extends Component{
         super(props)
     }
 
-    componentDidMount(){
+    _keyExtractor = (item, index) => item.id;
 
-        
-    }
+    _renderItem = ({item}) => (
+        <CardItem title={item.name} mode="contained"/>
+      );
 
     render(){
-
-        console.log(this.props.data)
 
         return(
             <View>
                 <Title style={{ marginVertical: 30, textAlign: 'center' }}>Lista de Personajes de Star Wars</Title>
-                <CardItem title="Hola" content="todo" mode="contained"/>
+                {
+                    this.props.data.loading
+                    ? <View><Text>Cargando...</Text></View>
+                    : <FlatList
+                            data={this.props.data.allPersons}
+                            keyExtractor={this._keyExtractor}
+                            renderItem={this._renderItem}
+                            />
+                }
+                
             </View>
         )
     }
@@ -33,7 +41,9 @@ class Main extends Component{
 
 export default graphql(
     gql`
-       {    allPersons{
+       {    
+            allPersons{
+                id
                 name
             }
         }
