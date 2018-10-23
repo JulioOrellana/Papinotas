@@ -12,20 +12,30 @@ class Main extends Component{
         super(props)
     }
 
-    _keyExtractor = (item, index) => item.id;
+    componentDidMount(){
+
+    }
+
+    _keyExtractor = (item,index) => item.id
 
     _renderItem = ({item}) => (
-        <CardItem title={item.name} mode="contained"/>
+        <CardItem title={item.name} id={item.id} mode="contained"/>
       );
 
-    render(){
+    shouldComponentUpdate(){
+        if(this.props.data.loading)
+            return true
+        else
+            return false
+    }
 
+    render(){
         return(
-            <View>
+            <View style={{flex:1}}>
                 <Title style={{ marginVertical: 30, textAlign: 'center' }}>Lista de Personajes de Star Wars</Title>
                 {
                     this.props.data.loading
-                    ? <View><Text>Cargando...</Text></View>
+                    ? <View style={{ marginHorizontal: 20 }}><Text>Cargando...</Text></View>
                     : <FlatList
                             data={this.props.data.allPersons}
                             keyExtractor={this._keyExtractor}

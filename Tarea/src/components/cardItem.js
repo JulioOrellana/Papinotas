@@ -5,18 +5,19 @@ import { Actions } from 'react-native-router-flux'
 
 class CardItem extends Component{
 
-    _goBack = () => Actions.pop()
+    goToPerson = () => Actions.singlePersonScreen({ id: this.props.id })
 
     render(){
+
         return(
-            <Card style={{ marginHorizontal: 10, marginBottom: 10}}>
+            <Card style={{ marginHorizontal: 10, marginBottom: 10 }}>
                 <Card.Content>
                     <Title>{ this.props.title }</Title>
                     <Paragraph>{ this.props.content }</Paragraph>
                 </Card.Content>
-                <Card.Actions>
-                    <Button icon="star" mode={this.props.mode}>Starred</Button>
-                    <Button icon="movie" mode={this.props.mode}>Ver</Button>
+                <Card.Actions style={{ justifyContent: 'space-between'}}>
+                    <Button icon="star" mode={ this.props.mode }></Button>
+                    <Button icon="movie" onPress={this.goToPerson} mode={this.props.mode}></Button>
                 </Card.Actions>
             </Card>
         )
