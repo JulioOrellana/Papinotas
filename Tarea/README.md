@@ -35,3 +35,11 @@ After setting up the environment:
 
 - Works on both iOS & Android
 
+## Tech Stack
+
+- Apollo
+- GraphQL
+- Lodash
+- Paper
+- React Native v0.52
+- Redux
