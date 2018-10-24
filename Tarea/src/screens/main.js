@@ -18,8 +18,6 @@ class Main extends Component{
 
     componentWillReceiveProps(state,props){
         
-        console.log(state)
-
         if(_.isEmpty(this.props.charList)){
             this.props.setCharList(state.data.allPersons)
         }
