@@ -12,12 +12,13 @@ import gql from "graphql-tag";
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvider } from 'react-redux';
 import createAppStore from './lib/store'
+import GLOBAL from './GLOBAL'
 
 const { persistor, store } = createAppStore()
 
 
 const client = new ApolloClient({
-  link: new HttpLink({ uri: "https://api.graphcms.com/simple/v1/swapi" }),
+  link: new HttpLink({ uri: GLOBAL.apiUri }),
   cache: new InMemoryCache(),
 })
 export default class App extends Component {

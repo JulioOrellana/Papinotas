@@ -1,6 +1,7 @@
 import createReducer from '../lib/createReducer'
 import * as types from '../actions/types'
 import _ from 'lodash'
+import store from '../lib/store'
 
 export const favoriteCharacters = createReducer([],{
     [types.FAVORITE_CHAR](state, action){
@@ -32,5 +33,22 @@ export const charList = createReducer([],{
     [types.CHAR_LIST](state, action){
 
         return action.list
+    }
+})
+
+export const filteredList = createReducer( [] ,{
+    [types.SEARCH_CHAR_LIST](state, action){
+        
+        if(action.text){
+            const list = action.list
+            try{
+                const fileteredList = _.filter(list, person => new RegExp(action.text).test(person.name.toLowerCase()) );
+                return fileteredList
+            }catch(e){
+                return []
+            }
+        }else{
+            return []
+        }
     }
 })

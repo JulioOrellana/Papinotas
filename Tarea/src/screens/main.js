@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, FlatList, StyleSheet } from 'react-native'
-import { Title } from 'react-native-paper' 
+import { Title, Button, Searchbar  } from 'react-native-paper' 
 import Header from '../components/header'
 import CardItem from '../components/cardItem'
 import { graphql } from 'react-apollo'
@@ -10,31 +10,24 @@ import { bindActionCreators, compose } from 'redux'
 import { ActionCreators } from '../actions'
 import _ from 'lodash'
 
-const QUERY = gql`
-{
-    allPersons {
-        id
-        name
-    }
-}
-`;
-
 class Main extends Component{
 
     constructor(props){
         super(props)
     }
 
-    async componentDidMount(){
-        // const data = await this.props.client.query({ query: QUERY });
-        // console.log("Data: ",data)
+    componentWillReceiveProps(state,props){
+        
+        console.log(state)
 
-        console.log(this.props)
+        if(_.isEmpty(this.props.charList)){
+            this.props.setCharList(state.data.allPersons)
+        }
     }
 
-    _getUserInfo = async () => {
-        
-    };
+    searchForCharacter(query){
+        this.props.searchInCharList(query)
+    }
 
     _keyExtractor = (item,index) => item.id
 
@@ -42,25 +35,21 @@ class Main extends Component{
         <CardItem title={item.name} id={item.id}/>
       );
 
-    shouldComponentUpdate(){
-
-        console.log(this.props)
-
-        if(this.props.data.loading)
-            return true
-        else
-            return false
-    }
-
     render(){
         return(
             <View style={{flex:1}}>
                 <Title style={ styles.title }>Lista de Personajes de Star Wars</Title>
+                
+                <Searchbar
+                style={{ marginHorizontal: 10, marginBottom: 20 }}
+                    placeholder="Filtrar por nombre"
+                    onChangeText={query => this.searchForCharacter(query) }
+                />
                 {
-                    this.props.data.loading
+                    _.isEmpty(this.props.charList)
                     ? <View style={{ marginHorizontal: 20 }}><Text style={{color: "#2980b9"}}>Cargando...</Text></View>
                     : <FlatList
-                            data={this.props.data.allPersons}
+                            data={ _.isEmpty(this.props.filteredList)? this.props.charList : this.props.filteredList}
                             keyExtractor={this._keyExtractor}
                             renderItem={this._renderItem}
                             />
@@ -74,7 +63,8 @@ class Main extends Component{
 
 const mapStateToProps = (state) => {
     return{
-
+        charList: state.charList,
+        filteredList: state.filteredList
     }
 }
 
@@ -93,7 +83,8 @@ const gqlWrapper = graphql(
                                 `
                             )   
 
-export default compose(gqlWrapper,
+export default compose(
+    gqlWrapper,
     connect(mapStateToProps, mapDispatchToProps)
     )(Main)
 
