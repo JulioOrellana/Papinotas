@@ -5,6 +5,19 @@ import Header from '../components/header'
 import CardItem from '../components/cardItem'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import { connect } from 'react-redux'
+import { bindActionCreators, compose } from 'redux'
+import { ActionCreators } from '../actions'
+import _ from 'lodash'
+
+const QUERY = gql`
+{
+    allPersons {
+        id
+        name
+    }
+}
+`;
 
 class Main extends Component{
 
@@ -12,9 +25,16 @@ class Main extends Component{
         super(props)
     }
 
-    componentDidMount(){
+    async componentDidMount(){
+        // const data = await this.props.client.query({ query: QUERY });
+        // console.log("Data: ",data)
 
+        console.log(this.props)
     }
+
+    _getUserInfo = async () => {
+        
+    };
 
     _keyExtractor = (item,index) => item.id
 
@@ -23,6 +43,9 @@ class Main extends Component{
       );
 
     shouldComponentUpdate(){
+
+        console.log(this.props)
+
         if(this.props.data.loading)
             return true
         else
@@ -49,16 +72,30 @@ class Main extends Component{
     
 }
 
-export default graphql(
-    gql`
-       {    
-            allPersons{
-                id
-                name
-            }
-        }
-    `
-)(Main)
+const mapStateToProps = (state) => {
+    return{
+
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+const gqlWrapper = graphql(
+                            gql`
+                                {    
+                                    allPersons{
+                                        id
+                                        name
+                                    }
+                                }
+                                `
+                            )   
+
+export default compose(gqlWrapper,
+    connect(mapStateToProps, mapDispatchToProps)
+    )(Main)
 
 const styles = StyleSheet.create({
     title:{

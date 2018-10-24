@@ -6,3 +6,10 @@ export function setFavoriteCharacters(characterId) {
         characterId
     }
 }
+
+export function setCharList(list){
+    return{
+        type: types.CHAR_LIST,
+        list
+    }
+}
