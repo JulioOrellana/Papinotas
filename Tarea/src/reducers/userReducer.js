@@ -32,7 +32,10 @@ export const favoriteCharacters = createReducer([],{
 export const charList = createReducer([],{
     [types.CHAR_LIST](state, action){
 
-        return action.list
+        if(action.list)
+            return action.list
+        else
+            return state
     }
 })
 
